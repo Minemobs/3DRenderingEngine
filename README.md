@@ -1,6 +1,8 @@
 # Minemobs's 3D Renderer
 
 #### The worst 3D renderer you'll ever see
+> **Warning**
+> Do not use it in production, it's just a program made for fun.
 
 ## How do I create a 3D model ?
 You have to create a file called `shape.xml` and follow this example:

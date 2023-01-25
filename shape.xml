@@ -1,54 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-    <row>
+    <!-- Head-->
+    <cube>
         <beginning>
-            <x>-25</x>
+            <x>-100</x>
+            <y>-100</y>
+            <z>-100</z>
+        </beginning>
+        <end>
+            <x>100</x>
+            <y>100</y>
+            <z>100</z>
+        </end>
+        <color>
+            <r>92</r>
+            <g>62</g>
+            <b>42</b>
+        </color>
+    </cube>
+    <!-- Glasses-->
+    <!-- <cube>
+        <beginning>
+            <x>-150</x>
+            <y>-70</y>
+            <z>-100</z>
+        </beginning>
+        <end>
+            <x>-100</x>
+            <y>0</y>
+            <z>100</z>
+        </end>
+        <color>
+            <r>128</r>
+            <g>128</g>
+            <b>128</b>
+        </color>
+    </cube>-->
+    <!-- Mouth-->
+    <cube>
+        <beginning>
+            <x>-101</x>
             <y>50</y>
             <z>-50</z>
         </beginning>
         <end>
-            <x>25</x>
+            <x>-101</x>
+            <y>55</y>
+            <z>50</z>
+        </end>
+        <color>
+            <r>0</r>
+            <g>0</g>
+            <b>0</b>
+        </color>
+    </cube>
+    <!-- Body-->
+    <cube>
+        <beginning>
+            <x>-80</x>
+            <y>100</y>
+            <z>-150</z>
+        </beginning>
+        <end>
+            <x>80</x>
+            <y>300</y>
+            <z>150</z>
+        </end>
+        <color>
+            <r>73</r>
+            <g>50</g>
+            <b>238</b>
+        </color>
+    </cube>
+    <!-- Left Eye-->
+    <cube>
+        <beginning>
+            <x>-100</x>
+            <y>-70</y>
+            <z>-75</z>
+        </beginning>
+        <end>
+            <x>-105</x>
+            <y>0</y>
+            <z>-20</z>
+        </end>
+        <color>
+            <r>255</r>
+            <g>255</g>
+            <b>255</b>
+        </color>
+    </cube>
+    <!-- Left Pupil-->
+    <cube>
+        <beginning>
+            <x>-105</x>
+            <y>-50</y>
+            <z>-50</z>
+        </beginning>
+        <end>
+            <x>-110</x>
+            <y>-20</y>
+            <z>-30</z>
+        </end>
+        <color>
+            <r>0</r>
+            <g>0</g>
+            <b>0</b>
+        </color>
+    </cube>
+    <!-- Right Eye-->
+    <cube>
+        <beginning>
+            <x>-100</x>
+            <y>-70</y>
+            <z>75</z>
+        </beginning>
+        <end>
+            <x>-105</x>
+            <y>0</y>
+            <z>20</z>
+        </end>
+        <color>
+            <r>255</r>
+            <g>255</g>
+            <b>255</b>
+        </color>
+    </cube>
+    <!-- Right Pupil-->
+    <cube>
+        <beginning>
+            <x>-105</x>
             <y>-50</y>
             <z>50</z>
-        </end>
-        <color>
-            <r>128</r>
-            <g>128</g>
-            <b>128</b>
-        </color>
-    </row>
-    <row>
-        <beginning>
-            <x>25</x>
-            <y>50</y>
-            <z>-50</z>
         </beginning>
         <end>
-            <x>75</x>
-            <y>-10</y>
-            <z>50</z>
+            <x>-110</x>
+            <y>-20</y>
+            <z>30</z>
         </end>
         <color>
-            <r>128</r>
-            <g>128</g>
-            <b>128</b>
+            <r>0</r>
+            <g>0</g>
+            <b>0</b>
         </color>
-    </row>
-    <row>
-        <beginning>
-            <x>75</x>
-            <y>25</y>
-            <z>-50</z>
-        </beginning>
-        <end>
-            <x>125</x>
-            <y>50</y>
-            <z>50</z>
-        </end>
-        <color>
-            <r>128</r>
-            <g>128</g>
-            <b>128</b>
-        </color>
-    </row>
+    </cube>
 </root>

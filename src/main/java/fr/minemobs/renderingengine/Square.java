@@ -1,3 +1,5 @@
+package fr.minemobs.renderingengine;
+
 import java.awt.Color;
 
 public class Square {
@@ -15,5 +17,9 @@ public class Square {
             new Triangle(v2, new Vertex(x1, y2, z1), new Vertex(x2, y1, z1), color),
             new Triangle(v1, new Vertex(x2, y1, z2), new Vertex(x1, y2, z2), color),
         };
+    }
+
+    public Triangle[] getTriangles() {
+        return triangles;
     }
 }

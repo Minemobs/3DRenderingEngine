@@ -1,3 +1,5 @@
+package fr.minemobs.renderingengine;
+
 import java.awt.Color;
 import java.util.Optional;
 
@@ -13,14 +15,39 @@ public class Parser {
         if(endElement == null) throw new InvalidXMLException("The shape.xml file is missing the end node.");
         Element colorElement = (Element) node.getElementsByTagName("color").item(0);
         return new Cube(
-            new Vertex(
-                getChildElementContent(beginningElement, "x"),
-                getChildElementContent(beginningElement, "y"),
-                getChildElementContent(beginningElement, "z")),
-            new Vertex(
-                getChildElementContent(endElement, "x"),
-                getChildElementContent(endElement, "y"),
-                getChildElementContent(endElement, "z")),
+            getVertex(beginningElement),
+            getVertex(endElement),
+            getColor(colorElement, Color.WHITE));
+    }
+
+    public static Square toSquare(Element node) throws InvalidXMLException {
+        Element beginningElement = (Element) node.getElementsByTagName("beginning").item(0);
+        if(beginningElement == null) throw new InvalidXMLException("The shape.xml file is missing the beginning node.");
+        Element endElement = (Element) node.getElementsByTagName("end").item(0);
+        if(endElement == null) throw new InvalidXMLException("The shape.xml file is missing the end node.");
+        Element colorElement = (Element) node.getElementsByTagName("color").item(0);
+        return new Square(
+            getVertex(beginningElement),
+            getVertex(endElement),
+            getColor(colorElement, Color.WHITE));
+    }
+
+    private static Vertex getVertex(Element node) throws InvalidXMLException {
+        return new Vertex(getChildElementContent(node, "x"), getChildElementContent(node, "y"), getChildElementContent(node, "z"));
+    }
+
+    public static Triangle toTriangle(Element node) throws InvalidXMLException {
+        Element v1 = (Element) node.getElementsByTagName("v1").item(0);
+        if(v1 == null) throw new InvalidXMLException("The shape.xml file is missing the first vertex node.");
+        Element v2 = (Element) node.getElementsByTagName("v2").item(0);
+        if(v2 == null) throw new InvalidXMLException("The shape.xml file is missing the 2nd vertex node.");
+        Element v3 = (Element) node.getElementsByTagName("v3").item(0);
+        if(v3 == null) throw new InvalidXMLException("The shape.xml file is missing the 3rd vertex node.");
+        Element colorElement = (Element) node.getElementsByTagName("color").item(0);
+        return new Triangle(
+            getVertex(v1),
+            getVertex(v2),
+            getVertex(v3),
             getColor(colorElement, Color.WHITE));
     }
 

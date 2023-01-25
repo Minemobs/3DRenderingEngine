@@ -1,3 +1,5 @@
+package fr.minemobs.renderingengine;
+
 import java.awt.Color;
 
 public class Triangle {

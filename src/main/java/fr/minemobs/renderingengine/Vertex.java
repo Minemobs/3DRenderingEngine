@@ -1,3 +1,5 @@
+package fr.minemobs.renderingengine;
+
 public class Vertex {
     public double x, y, z;
 

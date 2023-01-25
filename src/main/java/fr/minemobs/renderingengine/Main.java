@@ -27,10 +27,6 @@ import java.util.List;
 
 public class Main {
 
-    public static class Matrix {
-        
-    }
-
     public static void main(String[] args) {
         final int width = 400, height = 400;
         final JFrame frame = new JFrame("Funny cube");

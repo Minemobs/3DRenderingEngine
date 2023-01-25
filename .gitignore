@@ -1,2 +1,6 @@
 *.class
 *.obj
+.vscode/
+*.h
+output/
+geometry/

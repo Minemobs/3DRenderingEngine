@@ -1,8 +1,10 @@
-package fr.minemobs.renderingengine;
+package fr.minemobs.renderingengine.shapes;
 
 import java.awt.Color;
 
-public class Triangle {
+import fr.minemobs.renderingengine.Vertex;
+
+public class Triangle implements Shape {
     public final Vertex v1, v2, v3;
     public final Color color;
 
@@ -15,6 +17,11 @@ public class Triangle {
 
     public Triangle(Vertex v1, Vertex v2, Vertex v3) {
         this(v1, v2, v3, Color.WHITE);
+    }
+
+    @Override
+    public Triangle[] getTriangles() {
+        return new Triangle[] { this };
     }
 
     @Override

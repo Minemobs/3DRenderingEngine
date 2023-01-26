@@ -6,6 +6,10 @@ import java.util.Optional;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import fr.minemobs.renderingengine.shapes.Cube;
+import fr.minemobs.renderingengine.shapes.Square;
+import fr.minemobs.renderingengine.shapes.Triangle;
+
 public class Parser {
 
     public static Cube toCube(Element node) throws InvalidXMLException {

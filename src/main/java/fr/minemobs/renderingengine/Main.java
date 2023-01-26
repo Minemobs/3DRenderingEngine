@@ -1,13 +1,18 @@
 package fr.minemobs.renderingengine;
 
 import javax.swing.*;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import fr.minemobs.renderingengine.shapes.Cube;
+import fr.minemobs.renderingengine.shapes.Shape;
+import fr.minemobs.renderingengine.shapes.Square;
+import fr.minemobs.renderingengine.shapes.Triangle;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,6 +35,7 @@ public class Main {
     public static void main(String[] args) {
         final int width = 400, height = 400;
         final JFrame frame = new JFrame("Funny cube");
+        frame.setAlwaysOnTop(true);
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container pane = frame.getContentPane();
@@ -64,10 +70,8 @@ public class Main {
                     0, -Math.sin(pitch), Math.cos(pitch)
                 });
                 Matrix3 transform = headingTransform.multiply(pitchTransform);
-                //g2.translate(getWidth() / 2, getHeight() / 2);
                 
                 BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-                //Graphics2D g2d = img.createGraphics();
 
                 double[] zBuffer = new double[img.getWidth() * img.getHeight()];
                 Arrays.fill(zBuffer, Double.NEGATIVE_INFINITY);
@@ -105,7 +109,7 @@ public class Main {
 
                     double triangleArea = (v1.y - v3.y) * (v2.x - v3.x) + (v2.y - v3.y) * (v3.x - v1.x);
                     for(int y = minY; y <= maxY; y++) {
-                        for (int x = minX; x < maxX; x++) {
+                        for (int x = minX; x <= maxX; x++) {
                             double b1 = ((y - v3.y) * (v2.x - v3.x) + (v2.y - v3.y) * (v3.x - x)) / triangleArea;
                             double b2 = ((y - v1.y) * (v3.x - v1.x) + (v3.y - v1.y) * (v1.x - x)) / triangleArea;
                             double b3 = ((y - v2.y) * (v1.x - v2.x) + (v1.y - v2.y) * (v2.x - x)) / triangleArea;
@@ -114,7 +118,7 @@ public class Main {
                                 double depth = b1 * v1.z + b2 * v2.z + b3 * v3.z;
                                 int zIndex = y * img.getWidth() + x;
                                 if(zBuffer[zIndex] < depth) {
-                                    if(x == minX || x == maxX || y == minY || y == maxY) img.setRGB(x, y, Color.BLACK.getRGB());
+                                    if(x == minX || x == (maxX - 1) || y == minY || y == (maxY - 1)) img.setRGB(x, y, Color.BLACK.getRGB());
                                     else img.setRGB(x, y, getShade(t.color, angleCos).getRGB());
                                     zBuffer[zIndex] = depth;
                                 }
@@ -129,26 +133,27 @@ public class Main {
         pitchSlider.addChangeListener(e -> renderPanel.repaint());
         pane.add(renderPanel, BorderLayout.CENTER);
         frame.setVisible(true);
-        var t = new Thread(() -> {
-            try {
-                WatchService watchService = FileSystems.getDefault().newWatchService();
-                Path path = Path.of(".");
-                path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
-                while (true) {
-                    final WatchKey wk = watchService.take();
-                    for (WatchEvent<?> event : wk.pollEvents()) {
-                        final Path changed = (Path) event.context();
-                        if (changed.endsWith("shape.xml")) {
-                            System.out.println("Reloading");
-                            renderPanel.repaint();
-                        }
-                    }
-                    wk.reset();
-                }
-            } catch(IOException | InterruptedException ignored) {}
-        });
+        var t = new Thread(() -> listenToShapeFile(renderPanel));
         t.setDaemon(true);
         t.run();
+    }
+
+    private static void listenToShapeFile(JPanel renderPanel) {
+        try {
+            WatchService watchService = FileSystems.getDefault().newWatchService();
+            Path path = Path.of(".");
+            path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+            while (true) {
+                final WatchKey wk = watchService.take();
+                for (WatchEvent<?> event : wk.pollEvents()) {
+                    final Path changed = (Path) event.context();
+                    if (!changed.toString().equals("shape.xml")) continue;
+                    System.out.println("Reloading");
+                    renderPanel.repaint();
+                }
+                wk.reset();
+            }
+        } catch(IOException | InterruptedException ignored) {}
     }
 
     public static Color getShade(Color color, double shade) {
@@ -164,40 +169,39 @@ public class Main {
     }
     
     private static Triangle[] getTriangles() {
-        //List<Triangle> triangles = new ArrayList<>();
         List<Triangle> triangles = parseXMLFile();
-        //for (Square square : squares) {Collections.addAll(triangles, square.triangles);}
         return triangles.toArray(Triangle[]::new);
     }
 
     private static List<Triangle> parseXMLFile() {
         Path path = Path.of("shape.xml");
         try(InputStream is = Files.newInputStream(path)) {
-            List<Cube> cubes = new LinkedList<>();
-            List<Triangle> triangles = new LinkedList<>();
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            var doc = builder.parse(is);
+            List<Shape> shapes = new LinkedList<>();
+            var doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
             doc.getDocumentElement().normalize();
-            NodeList cubeRoot = doc.getElementsByTagName("cube");
-            for(int i = 0; i < cubeRoot.getLength(); i++) {
-                Element node = (Element) cubeRoot.item(i);
-                cubes.add(Parser.toCube(node));
-            }
-            NodeList triangleRoot = doc.getElementsByTagName("triangle");
-            for(int i = 0; i < triangleRoot.getLength(); i++) {
-                Element node = (Element) triangleRoot.item(i);
-                triangles.add(Parser.toTriangle(node));
-            }
-            NodeList squareRoot = doc.getElementsByTagName("square");
-            for(int i = 0; i < squareRoot.getLength(); i++) {
-                Element node = (Element) squareRoot.item(i);
-                triangles.addAll(Arrays.asList(Parser.toSquare(node).triangles));
-            }
-            triangles.addAll(cubes.stream().map(Cube::getSquares).flatMap(Arrays::stream).map(Square::getTriangles).flatMap(Arrays::stream).toList());
-            return triangles;
+            addShape(shapes, doc, "cube", Cube.class);
+            addShape(shapes, doc, "triangle", Triangle.class);
+            addShape(shapes, doc, "square", Square.class);
+            return shapes.stream().flatMap(t -> Arrays.stream(t.getTriangles())).toList();
         } catch (IOException | ParserConfigurationException | InvalidXMLException | SAXException e) {
             e.printStackTrace();
             return Collections.emptyList();
+        }
+    }
+
+    private static <T extends Shape> void addShape(List<Shape> shapes, Document doc, String tagName, Class<T> shapeClass) throws InvalidXMLException {
+        NodeList root = doc.getElementsByTagName(tagName);
+        for(int i = 0; i < root.getLength(); i++) {
+            Element node = (Element) root.item(i);
+            if(shapeClass == Cube.class) {
+                shapes.add(Parser.toCube(node));
+            } else if(shapeClass == Square.class) {
+                shapes.add(Parser.toSquare(node));
+            } else if(shapeClass == Triangle.class) {
+                shapes.add(Parser.toTriangle(node));
+            } else {
+                throw new InvalidXMLException("Unknown shape type: " + shapeClass.getSimpleName());
+            }
         }
     }
 }

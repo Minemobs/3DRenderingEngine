@@ -1,8 +1,10 @@
-package fr.minemobs.renderingengine;
+package fr.minemobs.renderingengine.shapes;
 
 import java.awt.Color;
 
-public class Square {
+import fr.minemobs.renderingengine.Vertex;
+
+public class Square implements Shape {
     
     public final Triangle[] triangles;
 
@@ -19,6 +21,7 @@ public class Square {
         };
     }
 
+    @Override
     public Triangle[] getTriangles() {
         return triangles;
     }

@@ -1,8 +1,11 @@
-package fr.minemobs.renderingengine;
+package fr.minemobs.renderingengine.shapes;
 
 import java.awt.Color;
+import java.util.Arrays;
 
-public class Cube {
+import fr.minemobs.renderingengine.Vertex;
+
+public class Cube implements Shape {
     public final Square[] squares;
 
     public Cube(Vertex a, Vertex b, Color color) {
@@ -18,5 +21,10 @@ public class Cube {
     
     public Square[] getSquares() {
         return squares;
+    }
+
+    @Override
+    public Triangle[] getTriangles() {
+        return Arrays.stream(squares).flatMap(t -> Arrays.stream(t.getTriangles())).toArray(Triangle[]::new);
     }
 }

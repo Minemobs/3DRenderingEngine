@@ -1,216 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-    <!-- Head-->
-    <cube>
-        <beginning>
-            <x>-100</x>
-            <y>-100</y>
-            <z>-100</z>
-        </beginning>
-        <end>
-            <x>100</x>
+    <tetrahedron>
+        <v1>
+            <x>0</x>
             <y>100</y>
-            <z>100</z>
-        </end>
-        <color>
-            <r>92</r>
-            <g>62</g>
-            <b>42</b>
-        </color>
-    </cube>
-    <!-- Glasses-->
-    <!-- <cube>
-        <beginning>
-            <x>-150</x>
-            <y>-70</y>
-            <z>-100</z>
-        </beginning>
-        <end>
+            <z>0</z>
+        </v1>
+        <v2>
+            <x>100</x>
+            <y>0</y>
+            <z>50</z>
+        </v2>
+        <v3>
             <x>-100</x>
             <y>0</y>
-            <z>100</z>
-        </end>
+            <z>50</z>
+        </v3>
+        <v4>
+            <x>0</x>
+            <y>0</y>
+            <z>-100</z>
+        </v4>
         <color>
-            <r>128</r>
-            <g>128</g>
+            <r>194</r>
+            <g>178</g>
             <b>128</b>
         </color>
-    </cube>-->
-    <!-- Mouth-->
-    <cube>
-        <beginning>
-            <x>-101</x>
-            <y>50</y>
-            <z>-50</z>
-        </beginning>
-        <end>
-            <x>-101</x>
-            <y>55</y>
-            <z>50</z>
-        </end>
-        <color>
-            <r>0</r>
-            <g>0</g>
-            <b>0</b>
-        </color>
-    </cube>
-    <!-- Body-->
-    <cube>
-        <beginning>
-            <x>-80</x>
-            <y>100</y>
-            <z>-150</z>
-        </beginning>
-        <end>
-            <x>80</x>
-            <y>300</y>
-            <z>150</z>
-        </end>
-        <color>
-            <r>73</r>
-            <g>50</g>
-            <b>238</b>
-        </color>
-    </cube>
-    <!-- Left Eye-->
-    <cube>
-        <beginning>
-            <x>-100</x>
-            <y>-70</y>
-            <z>-75</z>
-        </beginning>
-        <end>
-            <x>-105</x>
+    </tetrahedron>
+    <tetrahedron>
+        <v1>
+            <x>0</x>
+            <y>-100</y>
+            <z>0</z>
+        </v1>
+        <v2>
+            <x>100</x>
             <y>0</y>
-            <z>-20</z>
-        </end>
-        <color>
-            <r>255</r>
-            <g>255</g>
-            <b>255</b>
-        </color>
-    </cube>
-    <!-- Left Pupil-->
-    <cube>
-        <beginning>
-            <x>-105</x>
-            <y>-50</y>
-            <z>-50</z>
-        </beginning>
-        <end>
-            <x>-110</x>
-            <y>-20</y>
-            <z>-30</z>
-        </end>
-        <color>
-            <r>0</r>
-            <g>0</g>
-            <b>0</b>
-        </color>
-    </cube>
-    <!-- Right Eye-->
-    <cube>
-        <beginning>
-            <x>-100</x>
-            <y>-70</y>
-            <z>75</z>
-        </beginning>
-        <end>
-            <x>-105</x>
-            <y>0</y>
-            <z>20</z>
-        </end>
-        <color>
-            <r>255</r>
-            <g>255</g>
-            <b>255</b>
-        </color>
-    </cube>
-    <!-- Right Pupil-->
-    <cube>
-        <beginning>
-            <x>-105</x>
-            <y>-50</y>
             <z>50</z>
-        </beginning>
-        <end>
-            <x>-110</x>
-            <y>-20</y>
-            <z>30</z>
-        </end>
-        <color>
-            <r>0</r>
-            <g>0</g>
-            <b>0</b>
-        </color>
-    </cube>
-    <!-- Hair-->
-    <cube>
-        <beginning>
+        </v2>
+        <v3>
             <x>-100</x>
-            <y>-101</y>
+            <y>0</y>
+            <z>50</z>
+        </v3>
+        <v4>
+            <x>0</x>
+            <y>0</y>
             <z>-100</z>
-        </beginning>
-        <end>
-            <x>100</x>
-            <y>-135</y>
-            <z>100</z>
-        </end>
+        </v4>
         <color>
-            <r>40</r>
-            <g>40</g>
-            <b>40</b>
+            <r>194</r>
+            <g>178</g>
+            <b>128</b>
         </color>
-    </cube>
-    <cube>
-        <beginning>
-            <x>-100</x>
-            <y>-50</y>
-            <z>-98</z>
-        </beginning>
-        <end>
-            <x>100</x>
-            <y>-135</y>
-            <z>-130</z>
-        </end>
-        <color>
-            <r>40</r>
-            <g>40</g>
-            <b>40</b>
-        </color>
-    </cube>
-    <cube>
-        <beginning>
-            <x>-100</x>
-            <y>-50</y>
-            <z>98</z>
-        </beginning>
-        <end>
-            <x>100</x>
-            <y>-135</y>
-            <z>130</z>
-        </end>
-        <color>
-            <r>40</r>
-            <g>40</g>
-            <b>40</b>
-        </color>
-    </cube>
-    <cube>
-        <beginning>
-            <x>90</x>
-            <y>-135</y>
-            <z>130</z>
-        </beginning>
-        <end>
-            <x>150</x>
-            <y>0</y>
-            <z>-130</z>
-        </end>
-        <color>
-            <r>40</r>
-            <g>40</g>
-            <b>40</b>
-        </color>
-    </cube>
+    </tetrahedron>
 </root>

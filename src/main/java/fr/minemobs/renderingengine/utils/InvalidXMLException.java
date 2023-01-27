@@ -1,4 +1,4 @@
-package fr.minemobs.renderingengine;
+package fr.minemobs.renderingengine.utils;
 
 public class InvalidXMLException extends Exception {
 

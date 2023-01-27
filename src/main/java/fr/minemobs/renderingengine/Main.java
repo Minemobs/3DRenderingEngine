@@ -11,8 +11,11 @@ import org.xml.sax.SAXException;
 
 import fr.minemobs.renderingengine.shapes.Cube;
 import fr.minemobs.renderingengine.shapes.Shape;
+import fr.minemobs.renderingengine.shapes.Shapes;
 import fr.minemobs.renderingengine.shapes.Square;
+import fr.minemobs.renderingengine.shapes.Tetrahedron;
 import fr.minemobs.renderingengine.shapes.Triangle;
+import fr.minemobs.renderingengine.utils.InvalidXMLException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -29,8 +32,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Logger;
 
 public class Main {
+
+    public static final Logger LOGGER = Logger.getLogger("3D-Rendering-Engine");
 
     public static void main(String[] args) {
         final int width = 400, height = 400;
@@ -148,7 +155,7 @@ public class Main {
                 for (WatchEvent<?> event : wk.pollEvents()) {
                     final Path changed = (Path) event.context();
                     if (!changed.toString().equals("shape.xml")) continue;
-                    System.out.println("Reloading");
+                    LOGGER.info("Reloading");
                     renderPanel.repaint();
                 }
                 wk.reset();
@@ -179,29 +186,18 @@ public class Main {
             List<Shape> shapes = new LinkedList<>();
             var doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
             doc.getDocumentElement().normalize();
-            addShape(shapes, doc, "cube", Cube.class);
-            addShape(shapes, doc, "triangle", Triangle.class);
-            addShape(shapes, doc, "square", Square.class);
-            return shapes.stream().flatMap(t -> Arrays.stream(t.getTriangles())).toList();
+            addShapes(shapes, doc);
+            return shapes.stream().filter(Objects::nonNull).flatMap(t -> Arrays.stream(t.getTriangles())).toList();
         } catch (IOException | ParserConfigurationException | InvalidXMLException | SAXException e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
 
-    private static <T extends Shape> void addShape(List<Shape> shapes, Document doc, String tagName, Class<T> shapeClass) throws InvalidXMLException {
-        NodeList root = doc.getElementsByTagName(tagName);
-        for(int i = 0; i < root.getLength(); i++) {
-            Element node = (Element) root.item(i);
-            if(shapeClass == Cube.class) {
-                shapes.add(Parser.toCube(node));
-            } else if(shapeClass == Square.class) {
-                shapes.add(Parser.toSquare(node));
-            } else if(shapeClass == Triangle.class) {
-                shapes.add(Parser.toTriangle(node));
-            } else {
-                throw new InvalidXMLException("Unknown shape type: " + shapeClass.getSimpleName());
-            }
+    private static void addShapes(List<Shape> shapes, Document doc) throws InvalidXMLException {
+        for(Shapes shape : Shapes.values()) {
+            NodeList nodes = doc.getElementsByTagName(shape.getTag());
+            for(int i = 0; i < nodes.getLength(); i++) shapes.add(shape.getFunction().apply((Element) nodes.item(i)));
         }
     }
 }

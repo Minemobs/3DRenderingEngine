@@ -4,13 +4,13 @@ import java.util.function.Function;
 
 import org.w3c.dom.Element;
 
-import fr.minemobs.renderingengine.Parser;
+import fr.minemobs.renderingengine.parser.XMLParser;
 
 public enum Shapes {
-    CUBE("cube", Parser::toCube),
-    SQUARE("square", Parser::toSquare),
-    TETRAHEDRON("tetrahedron", Parser::toTetrahedron),
-    TRIANGLE("triangle", Parser::toTriangle);
+    CUBE("cube", XMLParser::toCube),
+    SQUARE("square", XMLParser::toSquare),
+    TETRAHEDRON("tetrahedron", XMLParser::toTetrahedron),
+    TRIANGLE("triangle", XMLParser::toTriangle);
 
     private final String tag;
     private final Function<Element, Shape> function;

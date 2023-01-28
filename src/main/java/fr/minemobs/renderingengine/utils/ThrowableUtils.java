@@ -7,9 +7,10 @@ public class ThrowableUtils {
     private ThrowableUtils() {}
 
     public static String toString(Throwable throwable) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        throwable.printStackTrace(pw);
-        return sw.toString();
+        var sw = new StringWriter();
+        try(PrintWriter pw = new PrintWriter(sw)) {
+            throwable.printStackTrace(pw);
+            return sw.toString();
+        }
     }
 }

@@ -24,8 +24,13 @@ public class Triangle implements Shape {
         return new Triangle[] { this };
     }
 
+    public Triangle multiply(int x) {
+        if(x < 2) return this;
+        return new Triangle(new Vertex(this.v1.x * x, this.v1.y * x, this.v1.z * x), new Vertex(this.v2.x * x, this.v2.y * x, this.v2.z * x), new Vertex(this.v3.x * x, this.v3.y * x, this.v3.z * x), this.color);
+    }
+
     @Override
     public String toString() {
-        return "V1: " + v1.toString() + " | V2: " + v2.toString() + " | V3: " + v3.toString();
+        return "V1: " + v1.toString() + " | V2: " + v2.toString() + " | V3: " + v3.toString() + "\n";
     }
 }

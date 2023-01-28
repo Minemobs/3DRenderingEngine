@@ -1,43 +1,26 @@
 package fr.minemobs.renderingengine;
 
 import javax.swing.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import fr.minemobs.renderingengine.shapes.Cube;
-import fr.minemobs.renderingengine.shapes.Shape;
-import fr.minemobs.renderingengine.shapes.Shapes;
-import fr.minemobs.renderingengine.shapes.Square;
-import fr.minemobs.renderingengine.shapes.Tetrahedron;
+import fr.minemobs.renderingengine.parser.OBJParser;
+import fr.minemobs.renderingengine.parser.XMLParser;
 import fr.minemobs.renderingengine.shapes.Triangle;
-import fr.minemobs.renderingengine.utils.InvalidXMLException;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 public class Main {
 
     public static final Logger LOGGER = Logger.getLogger("3D-Rendering-Engine");
+    private static boolean useXML = false;
 
     public static void main(String[] args) {
         final int width = 400, height = 400;
@@ -124,11 +107,10 @@ public class Main {
                                 //Avoiding z fighting
                                 double depth = b1 * v1.z + b2 * v2.z + b3 * v3.z;
                                 int zIndex = y * img.getWidth() + x;
-                                if(zBuffer[zIndex] < depth) {
-                                    if(x == minX || x == (maxX - 1) || y == minY || y == (maxY - 1)) img.setRGB(x, y, Color.BLACK.getRGB());
-                                    else img.setRGB(x, y, getShade(t.color, angleCos).getRGB());
-                                    zBuffer[zIndex] = depth;
-                                }
+                                if(zBuffer[zIndex] > depth) continue; 
+                                //if(x == minX || x == (maxX - 1) || y == minY || y == (maxY - 1)) img.setRGB(x, y, Color.BLACK.getRGB());
+                                img.setRGB(x, y, getShade(t.color, angleCos).getRGB());
+                                zBuffer[zIndex] = depth;
                             }
                         }
                     }
@@ -148,13 +130,13 @@ public class Main {
     private static void listenToShapeFile(JPanel renderPanel) {
         try {
             WatchService watchService = FileSystems.getDefault().newWatchService();
-            Path path = Path.of(".");
+            Path path = Path.of("");
             path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
             while (true) {
                 final WatchKey wk = watchService.take();
                 for (WatchEvent<?> event : wk.pollEvents()) {
                     final Path changed = (Path) event.context();
-                    if (!changed.toString().equals("shape.xml")) continue;
+                    if (!changed.toString().equals(useXML ? "shape.xml" : "shape.obj")) continue;
                     LOGGER.info("Reloading");
                     renderPanel.repaint();
                 }
@@ -172,32 +154,13 @@ public class Main {
         int green = (int) Math.pow(greenLinear, 1/2.4);
         int blue = (int) Math.pow(blueLinear, 1/2.4);
     
-        return new Color(red, green, blue);
+        return new Color(red, green, blue, 255);
     }
     
     private static Triangle[] getTriangles() {
-        List<Triangle> triangles = parseXMLFile();
-        return triangles.toArray(Triangle[]::new);
-    }
-
-    private static List<Triangle> parseXMLFile() {
-        Path path = Path.of("shape.xml");
-        try(InputStream is = Files.newInputStream(path)) {
-            List<Shape> shapes = new LinkedList<>();
-            var doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-            doc.getDocumentElement().normalize();
-            addShapes(shapes, doc);
-            return shapes.stream().filter(Objects::nonNull).flatMap(t -> Arrays.stream(t.getTriangles())).toList();
-        } catch (IOException | ParserConfigurationException | InvalidXMLException | SAXException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
-    }
-
-    private static void addShapes(List<Shape> shapes, Document doc) throws InvalidXMLException {
-        for(Shapes shape : Shapes.values()) {
-            NodeList nodes = doc.getElementsByTagName(shape.getTag());
-            for(int i = 0; i < nodes.getLength(); i++) shapes.add(shape.getFunction().apply((Element) nodes.item(i)));
-        }
+        Path obj = Path.of("shape.obj");
+        if(obj.toFile().exists()) return OBJParser.parseOBJFile(obj).stream().map(t -> t.multiply(1)).toArray(Triangle[]::new);
+        useXML = true;
+        return XMLParser.parseXMLFile(Path.of("shape.xml")).toArray(Triangle[]::new);
     }
 }

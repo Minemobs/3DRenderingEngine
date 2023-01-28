@@ -4,7 +4,8 @@
 > **Warning**
 > Do not use it in production, it's just a program made for fun.
 
-## How do I create a 3D model ?
+## How do I create a 3D model using XML ?
+###### (you don't)
 You have to create a file called `shape.xml` and follow this example:
 <details>
     <summary>Example code</summary>
@@ -71,10 +72,12 @@ You have to create a file called `shape.xml` and follow this example:
             <b>240</b> 
         </color>
     </triangle>
-    <!-- I'm lazy so I'll let you do the rest -->
+    <!-- I'm lazy so I'll let you do the rest of the body -->
 </root>
 ```
 </details>
 
-## Can I use .obj instead of xml
-no.
+## How do I create a 3D model using .OBJ ?
+You have paste your file in the root directory of jar and rename your model to `shape.obj`
+
+And you'll also have to make it at least a [googolplex](https://en.wikipedia.org/wiki/Gogolplex) time bigger.
